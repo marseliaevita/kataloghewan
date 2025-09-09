@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 import '../models/pet.dart';
+import '../pages/detail_page.dart';
 
 class PetCard extends StatelessWidget {
   final Pet pet;
-  final VoidCallback onTap;
 
-  const PetCard({super.key, required this.pet, required this.onTap});
+  const PetCard({super.key, required this.pet});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        leading: Image.asset(pet.image, width: 60, fit: BoxFit.cover),
-        title: Text(pet.name),
-        subtitle: Text(pet.type),
-        onTap: onTap,
+    return GestureDetector(
+      onTap: () {
+        //Navigasi ke halaman detail
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPage(pet: pet),
+          ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: ListTile(
+          contentPadding: const EdgeInsets.all(12),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(pet.image, width: 60, fit: BoxFit.cover),
+          ),
+          title: Text(pet.name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          subtitle: Text(pet.type, style: const TextStyle(color: Colors.grey)),
+          trailing: const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+        ),
       ),
     );
   }
