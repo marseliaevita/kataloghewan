@@ -10,10 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String selectedCategory = "All"; // default All biar semua tampil
+  String selectedCategory = "All";
   String searchQuery = "";
 
-  //Daftar hewan (dari kode awal)
   final List<Pet> pets = [
     Pet(name: "Milo", type: "Cat", description: "Kucing Persia", image: "assets/images/cat1.jpg"),
     Pet(name: "Buddy", type: "Dog", description: "Anjing Golden", image: "assets/images/dog1.jpg"),
@@ -24,28 +23,57 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //Filter hewan berdasarkan kategori & search
     final filteredPets = pets.where((pet) {
       final matchesCategory = selectedCategory == "All" || pet.type == selectedCategory;
       final matchesSearch = pet.name.toLowerCase().contains(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     }).toList();
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 800;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.orange.shade50,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //Search bar
+              // Header
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "🐾 CritterCare",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade800,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "Adopt a pet. Love a friend.",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+
+              // Search
               TextField(
                 decoration: InputDecoration(
-                  hintText: "Search pet...",
-                  prefixIcon: Icon(Icons.search),
+                  hintText: "Search by name...",
+                  prefixIcon: const Icon(Icons.search),
                   filled: true,
                   fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: BorderSide.none,
@@ -59,7 +87,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
 
-              //Category Buttons
+              // Category
               SizedBox(
                 height: 50,
                 child: ListView(
@@ -76,23 +104,50 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
 
-              //Title
-              Text("Newest Pet",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-
+              // Title
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Available Pets",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "${filteredPets.length} found",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  )
+                ],
+              ),
               const SizedBox(height: 10),
 
-              //Pet List
+              // Pet List
               Expanded(
                 child: filteredPets.isEmpty
-                    ? Center(child: Text("No pets found"))
-                    : ListView.builder(
-                        itemCount: filteredPets.length,
-                        itemBuilder: (context, index) {
-                          final pet = filteredPets[index];
-                          return PetCard(pet: pet);
-                        },
-                      ),
+                    ? Center(
+                        child: Text(
+                          "No pets found",
+                          style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                        ),
+                      )
+                    : isDesktop
+                        ? GridView.builder(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 3 / 2.5,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                            ),
+                            itemCount: filteredPets.length,
+                            itemBuilder: (context, index) {
+                              return PetCard(pet: filteredPets[index]);
+                            },
+                          )
+                        : ListView.builder(
+                            itemCount: filteredPets.length,
+                            itemBuilder: (context, index) {
+                              return PetCard(pet: filteredPets[index]);
+                            },
+                          ),
               ),
             ],
           ),
@@ -101,7 +156,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //Category Button
   Widget _buildCategory(String category) {
     final isSelected = category == selectedCategory;
     return GestureDetector(
@@ -112,16 +166,16 @@ class _HomePageState extends State<HomePage> {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.orange : Colors.white,
+          color: isSelected ? Colors.orange.shade600 : Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
         ),
         child: Text(
           category,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.grey,
+            color: isSelected ? Colors.white : Colors.grey.shade800,
             fontWeight: FontWeight.w600,
           ),
         ),

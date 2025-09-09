@@ -11,13 +11,18 @@ class DetailPage extends StatelessWidget {
     final tips = _getCareTips(pet.type);
 
     return Scaffold(
+      backgroundColor: Colors.orange.shade50, // senada HomePage
       appBar: AppBar(
-        title: Text(pet.name),
-        backgroundColor: Colors.orange,
+        title: Text(
+          pet.name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.orange.shade800, // senada Home header
+        elevation: 2,
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final isDesktop = constraints.maxWidth > 800; 
+          final isDesktop = constraints.maxWidth > 800;
 
           return SingleChildScrollView(
             child: Padding(
@@ -43,7 +48,7 @@ class DetailPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 40),
 
-                        //Detail di kanan
+                        // Detail di kanan
                         Expanded(
                           flex: 1,
                           child: _buildDetailSection(pet, tips),
@@ -76,7 +81,6 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  //Bagian detail deskripsi + tips
   Widget _buildDetailSection(Pet pet, List<String> tips) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,58 +88,104 @@ class DetailPage extends StatelessWidget {
         // Nama + Jenis
         Text(
           pet.name,
-          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Colors.orange.shade800,
+          ),
         ),
         Text(
           pet.type,
-          style: const TextStyle(fontSize: 18, color: Colors.grey),
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.grey.shade700,
+            fontStyle: FontStyle.italic,
+          ),
         ),
         const SizedBox(height: 20),
 
         // Karakteristik
-        const Text(
-          "Karakteristik",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          pet.description,
-          style: const TextStyle(fontSize: 16, height: 1.5),
+        Card(
+          color: Colors.white,
+          elevation: 4,
+          shadowColor: Colors.orange.withOpacity(0.3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Karakteristik",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange.shade800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  pet.description,
+                  style: const TextStyle(fontSize: 16, height: 1.6),
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 20),
 
         // Tips Perawatan
-        const Text(
-          "Tips Perawatan",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: tips
-              .map((tip) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("• ",
-                            style: TextStyle(fontSize: 16, height: 1.4)),
-                        Expanded(
-                          child: Text(
-                            tip,
-                            style: const TextStyle(fontSize: 16, height: 1.4),
+        Card(
+          color: Colors.white,
+          elevation: 4,
+          shadowColor: Colors.orange.withOpacity(0.3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Tips Perawatan",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange.shade800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: tips
+                      .map(
+                        (tip) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.check_circle, color: Colors.orange.shade600, size: 20),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  tip,
+                                  style: const TextStyle(fontSize: 16, height: 1.5),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ))
-              .toList(),
+                      )
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
 
-  //Tips perawatan per jenis hewan
   static List<String> _getCareTips(String type) {
     switch (type) {
       case "Cat":
@@ -171,7 +221,7 @@ class DetailPage extends StatelessWidget {
           "Gunakan filter agar air tetap bersih.",
         ];
       default:
-        return ["Rawat dengan penuh kasih sayang."];
+        return ["Rawat dengan penuh kasih sayang 💕."];
     }
   }
 }

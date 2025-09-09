@@ -11,7 +11,7 @@ class PetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //Navigasi ke halaman detail
+        // Navigasi ke halaman detail
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -22,16 +22,55 @@ class PetCard extends StatelessWidget {
       child: Card(
         margin: const EdgeInsets.only(bottom: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(12),
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(pet.image, width: 60, fit: BoxFit.cover),
-          ),
-          title: Text(pet.name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          subtitle: Text(pet.type, style: const TextStyle(color: Colors.grey)),
-          trailing: const Icon(Icons.arrow_forward_ios, color: Colors.orange),
+        elevation: 4,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Gambar pet full lebar
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              child: Image.asset(
+                pet.image,
+                width: double.infinity,
+                height: 180, // lebih besar dari sebelumnya
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    pet.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    pet.type,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.orange.shade800,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    pet.description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade700,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
